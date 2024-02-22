@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 // Collections -> data
 // Database -> user , notes
 
-dotenv.config();
+dotenv.config({path:"./backend/.env"});
 const mongoURL = `mongodb+srv://${process.env.ADMIN}:${process.env.PASS}@${process.env.CLUSTER_NAME}.mongodb.net/data?retryWrites=true&w=majority`
 
 const connectToMongo = async () => {
