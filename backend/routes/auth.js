@@ -24,11 +24,11 @@ router.post('/createuser', [
     try {
         let user = await User.findOne({ email: req.body.email });
         if (user) {
-            res.status(400).json({ error: "User already exists" });
+            return res.status(400).json({ error: "User already exists" });
         }
 
         // Hashing password
-        let salt = await bcrypt.genSaltSync(10);
+        let salt = bcrypt.genSaltSync(10);
         let secPass = await bcrypt.hash(req.body.password, salt);
 
         // Creating user and pushing it to db
@@ -43,6 +43,7 @@ router.post('/createuser', [
                 id: user.id
             }
         }
+
         const authToken = jwt.sign(data, Secret_Key);
         // console.log(authToken);
         res.json({ authToken });
@@ -91,8 +92,8 @@ router.post('/login', [
 // ROUTE 3: Get details of user through jwt-tokens (Login required)
 router.post('/getuser', fetchuser, async (req, res) => {
     try {
-        userId = req.user.Id;
-        const user = await User.findOne({ userId }).select("-password");
+        const userId = req.user.id;
+        const user = await User.findById( userId ).select("-password");
         res.send(user);
     } catch (error) {
         console.error(error.message);
