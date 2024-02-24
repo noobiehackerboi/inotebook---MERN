@@ -7,10 +7,13 @@ const NoteItem = (props) => {
             <div class="card my-3">
                 <div class="card-body">
                     <h5 class="card-title">{note.title}</h5>
+                    <i class="fa-regular fa-pen-to-square mx-1"></i>
+                    <i class="fa-solid fa-trash mx-1"></i>
+
                     <p class="card-text">{note.description}</p>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 
