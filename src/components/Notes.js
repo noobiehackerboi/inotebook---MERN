@@ -1,41 +1,45 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState, useRef } from 'react'
 import NoteItem from './NoteItem';
 import Addnote from './Addnote';
 import noteContext from "../context/notes/noteContext";
+import { useNavigate } from 'react-router-dom';
 
-const Notes = () => {
+const Notes = (props) => {
+    const navigate = useNavigate();
+
     const context = useContext(noteContext);
-    const { notes, getnotes } = context;
+    const { notes, getnotes, editnote } = context;
+    const [note, setNote] = useState({ title: "", description: "", tag: "" });
+
     useEffect(() => {
-        getnotes();
+        console.log("Use effect called")
+        if (localStorage.getItem('auth-token')) {
+            getnotes();
+        } else {
+            navigate('/');
+        }
         // eslint-disable-next-line
     }, []);
-    // const updateNote = () => {
-    //     ref.current.click();
-    // }
-    // const ref = useRef(null);
+    const refOpen = useRef(null);
+    const refClose = useRef(null);
+
+    const updateNote = (currentNote) => {
+        refOpen.current.click();
+        setNote(currentNote);
+    }
+
+    const handleClick = (e) => {
+        editnote(note._id, note.title, note.description, note.tag);
+        props.showAlert("Notes edited", "success");
+        refClose.current.click();
+    }
+    const onChange = (e) => {
+        setNote({ ...note, [e.target.name]: e.target.value });
+    }
     return (
         <>
-            <Addnote />
-
-
-            <div className="row my-3">
-                <h1>Your Notes</h1>
-                {notes.map((note) => {
-                    return <NoteItem key={note._id}
-                    // updateNote={updateNote}
-                    note={note} />;
-                })}
-            </div>
-        </>
-    )
-}
-
-export default Notes;
-
-{/* <button ref={ref} type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Launch demo modal
-            </button>
+            <Addnote showAlert={props.showAlert} />
+            <button ref={refOpen} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">Hidden Modal</button>
             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
@@ -47,23 +51,37 @@ export default Notes;
                             <form>
                                 <div className="mb-3">
                                     <label htmlFor="title" className="form-label">Title</label>
-                                    <input type="text" className="form-control" id="title" name='title' aria-describedby="emailHelp" onChange={onChange} />
+                                    <input value={note.title} type="text" className="form-control" id="title" name='title' aria-describedby="emailHelp" onChange={onChange} />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="description" className="form-label">Description</label>
-                                    <input type="text" className="form-control" id="description" name='description' onChange={onChange} />
+                                    <input value={note.description} type="text" className="form-control" id="description" name='description' onChange={onChange} />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="tag" className="form-label">Tag</label>
-                                    <input type="text" className="form-control" id="tag" name='tag' onChange={onChange} />
+                                    <input value={note.tag} type="text" className="form-control" id="tag" name='tag' onChange={onChange} />
                                 </div>
-                                <button type="submit" className="btn btn-primary" onClick={handleClick}>Add a Note</button>
                             </form>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary">Save Note</button>
+                            <button ref={refClose} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button disabled={note.title.length < 3 || note.description.length < 5} type="button" className="btn btn-primary" onClick={handleClick}>Save Note</button>
                         </div>
                     </div>
                 </div>
-            </div> */}
+            </div>
+
+            <div className="row my-3">
+                <h1>Your Notes</h1>
+                <div className="container mx-3">
+                    {notes.length === 0 && "Nothing to show"}
+                </div>
+                {notes.map((note) => {
+                    return <NoteItem showAlert={props.showAlert} key={note._id} updateNote={updateNote} note={note} />;
+                })}
+            </div>
+        </>
+    )
+}
+
+export default Notes;

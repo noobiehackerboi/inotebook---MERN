@@ -16,15 +16,16 @@ router.post('/createuser', [
     body('email').isEmail()
 ], async (req, res) => {
 
+    let success = false;
     const result = validationResult(req);
     if (!result.isEmpty()) {
-        return res.status(400).send({ errors: result.array() });
+        return res.status(400).send({ success, errors: result.array() });
     }
 
     try {
         let user = await User.findOne({ email: req.body.email });
         if (user) {
-            return res.status(400).json({ error: "User already exists" });
+            return res.status(400).json({ success, error: "User already exists" });
         }
 
         // Hashing password
@@ -43,10 +44,10 @@ router.post('/createuser', [
                 id: user.id
             }
         }
-
+        success = true;
         const authToken = jwt.sign(data, Secret_Key);
         // console.log(authToken);
-        res.json({ authToken });
+        res.json({ success, authToken });
 
     } catch (error) {
         console.error(error.message);
@@ -59,21 +60,22 @@ router.post('/login', [
     body('password').isLength({ min: 5 }),
     body('email').isEmail()
 ], async (req, res) => {
+    let success = false;
     const result = validationResult(req);
     if (!result.isEmpty()) {
-        return res.status(400).send({ errors: result.array() });
+        return res.status(400).send({ success, errors: result.array() });
     }
 
     const { email, password } = req.body;
     try {
         let user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ error: "Enter correct values" });
+            return res.status(400).json({ success, error: "Enter correct values" });
         }
 
         const passwordCheck = await bcrypt.compare(password, user.password);
         if (!passwordCheck) {
-            return res.status(400).json({ error: "Enter correct values" });
+            return res.status(400).json({ success, error: "Enter correct values" });
         }
 
         const data = {
@@ -81,8 +83,9 @@ router.post('/login', [
                 id: user.id
             }
         }
+        success = true;
         const authToken = jwt.sign(data, Secret_Key);
-        res.json({ authToken });
+        res.json({ success, authToken });
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Some error occured");
@@ -93,7 +96,7 @@ router.post('/login', [
 router.post('/getuser', fetchuser, async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await User.findById( userId ).select("-password");
+        const user = await User.findById(userId).select("-password");
         res.send(user);
     } catch (error) {
         console.error(error.message);
