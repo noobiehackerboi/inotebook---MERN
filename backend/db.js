@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 // FILE STRUCTURE IN MONGO DB
@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 // Database -> user , notes
 
 dotenv.config({path:"./backend/.env"});
-const mongoURL = `mongodb+srv://${process.env.ADMIN}:${process.env.PASS}@${process.env.CLUSTER_NAME}.mongodb.net/data?retryWrites=true&w=majority`
+const mongoURL = `mongodb+srv://${process.env.ADMIN}:${process.env.PASS}@${process.env.CLUSTER_NAME}.mongodb.net/data?retryWrites=true&w=majority`;
 
 const connectToMongo = async () => {
     await mongoose.connect(mongoURL).
