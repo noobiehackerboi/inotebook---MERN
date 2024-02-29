@@ -18,7 +18,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "nodemon":"nodemon backend/index.js",
+    "nodemon": "cd ./backend && nodemon --env-file=.env ./index.js",
     "both": "concurrently \"npm run start\" \"npm run nodemon\""
   },
   "eslintConfig": {
