@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 
 const Login = (props) => {
-    const host = process.env.HOST;
+    const HOST = process.env.REACT_APP_HOST;
+    const PORT = process.env.REACT_APP_PORT;
+    const host = `${HOST}:${PORT}`;
     const navigate = useNavigate();
 
     const [user, setUser] = useState({ email: "", password: "" });
@@ -31,6 +33,9 @@ const Login = (props) => {
     }
     return (
         <div className='container'>
+            <h1 className='mb-5'>
+                Login To iNoteBook - Your personal notes on cloud
+            </h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email address</label>

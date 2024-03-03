@@ -4,6 +4,7 @@ const Secret_Key = process.env.SECRET_KEY
 
 const fetchuser = (req, res, next) => {
     const token = req.header('auth-token');
+    const clearToken = true;
     if (!token) {
         res.status(401).json({ error: "Authenticate using a valid token" });
     }
@@ -12,7 +13,7 @@ const fetchuser = (req, res, next) => {
         req.user = data.user;
         next();
     } catch (error) {
-        res.status(401).json({ error: "Authenticate using a valid token" });
+        res.status(200).json({ clearToken, error: "Authenticate using a valid token" });
     }
 }
 module.exports = fetchuser;

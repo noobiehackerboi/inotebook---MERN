@@ -1,23 +1,37 @@
 import { useState } from "react";
 import noteContext from "./noteContext";
+import { useNavigate } from "react-router-dom";
 
 const NoteState = (props) => {
-    const host = process.env.HOST;
-    const notesInitial = []
-    const [notes, setNotes] = useState(notesInitial);
+    const HOST = process.env.REACT_APP_HOST;
+    const PORT = process.env.REACT_APP_PORT;
+    const host = `${HOST}:${PORT}`;
 
-    // Adding notes
+    // Initial notes is empty
+    // const notesInitial = [];
+    const [notes, setNotes] = useState([]);
+    const navigate = useNavigate();
+
+    // Adding notes to the users list
     const getnotes = async () => {
         //  API Calls todo
         const response = await fetch(`${host}/routes/notes/fetchallnotes`, {
-            method: "GET",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "auth-token": localStorage.getItem('auth-token')
             }
         });
         const json = await response.json();
-        setNotes(json);
+
+        // if token is not valid clearToken true is sent from server to clear the token
+        if (json.clearToken) {
+            localStorage.removeItem('auth-token');
+            navigate('/login');
+        }
+        else {
+            setNotes(json.notes);
+        }
     }
 
     // Adding notes
@@ -32,7 +46,7 @@ const NoteState = (props) => {
             body: JSON.stringify({ title, description, tag })
         });
         const note = await response.json();
-        setNotes(notes.concat(note));
+        setNotes(notes.concat(note.note));
     }
 
     // Deleting notes
@@ -47,7 +61,7 @@ const NoteState = (props) => {
         });
         const json = await response.json();
 
-        const newNotes = notes.filter((note) => { return note._id !== json._id });
+        const newNotes = notes.filter((note) => { return note._id !== json.note._id });
         setNotes(newNotes);
     }
 

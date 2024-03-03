@@ -1,15 +1,19 @@
 import './App.css';
 import { useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+
+import NoteState from './context/notes/NoteState';
+
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import About from './components/About';
-import NoteState from './context/notes/NoteState';
 import Alert from './components/Alert';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
 
 function App() {
+
+  // Alert State
   const [alert, setAlert] = useState(null);
 
   const showAlert = (message, type) => {
@@ -21,11 +25,12 @@ function App() {
       setAlert(null)
     }, 2000);
   };
+
   return (
     <>
-      <NoteState>
-        <BrowserRouter>
-          <Navbar />
+      <BrowserRouter>
+        <NoteState>
+          <Navbar showAlert={showAlert} />
           <Alert alert={alert} />
           <div className="container">
             <Routes>
@@ -35,8 +40,8 @@ function App() {
               <Route path='/signup' element={<SignUp showAlert={showAlert} />}></Route>
             </Routes>
           </div>
-        </BrowserRouter>
-      </NoteState>
+        </NoteState>
+      </BrowserRouter>
     </>
   );
 }

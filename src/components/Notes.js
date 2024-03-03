@@ -2,22 +2,15 @@ import { useContext, useEffect, useState, useRef } from 'react'
 import NoteItem from './NoteItem';
 import Addnote from './Addnote';
 import noteContext from "../context/notes/noteContext";
-import { useNavigate } from 'react-router-dom';
 
 const Notes = (props) => {
-    const navigate = useNavigate();
 
     const context = useContext(noteContext);
     const { notes, getnotes, editnote } = context;
     const [note, setNote] = useState({ title: "", description: "", tag: "" });
 
     useEffect(() => {
-        console.log("Use effect called")
-        if (localStorage.getItem('auth-token')) {
-            getnotes();
-        } else {
-            navigate('/');
-        }
+        getnotes();
         // eslint-disable-next-line
     }, []);
     const refOpen = useRef(null);
@@ -39,6 +32,7 @@ const Notes = (props) => {
     return (
         <>
             <Addnote showAlert={props.showAlert} />
+
             <button ref={refOpen} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">Hidden Modal</button>
             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">

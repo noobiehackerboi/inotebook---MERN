@@ -4,6 +4,8 @@ const User = require('../models/User');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
+// Middleware to fetch User details from auth-token
 const fetchuser = require('../middleware/fetchUser')
 
 const Secret_Key = process.env.SECRET_KEY
@@ -25,33 +27,33 @@ router.post('/createuser', [
     try {
         let user = await User.findOne({ email: req.body.email });
         if (user) {
-            return res.status(400).json({ success, error: "User already exists" });
+            return res.status(200).json({ success, error: "User already exists" });
         }
 
         // Hashing password
         let salt = bcrypt.genSaltSync(10);
         let secPass = await bcrypt.hash(req.body.password, salt);
 
-        // Creating user and pushing it to db
+        // Creating user and pushing it to DB
         user = await User.create({
             name: req.body.name,
             email: req.body.email,
             password: secPass
         })
 
+        // Creating a payload for JWT
         const data = {
             user: {
-                id: user.id
+                id: user._id
             }
         }
         success = true;
         const authToken = jwt.sign(data, Secret_Key);
-        // console.log(authToken);
         res.json({ success, authToken });
 
     } catch (error) {
         console.error(error.message);
-        res.status(500).send("Some error occured");
+        res.status(500).send("Internal Server Error");
     }
 });
 
@@ -60,6 +62,7 @@ router.post('/login', [
     body('password').isLength({ min: 5 }),
     body('email').isEmail()
 ], async (req, res) => {
+
     let success = false;
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -70,25 +73,27 @@ router.post('/login', [
     try {
         let user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ success, error: "Enter correct values" });
+            return res.status(200).json({ success, error: "Not a registered User" });
         }
 
         const passwordCheck = await bcrypt.compare(password, user.password);
         if (!passwordCheck) {
-            return res.status(400).json({ success, error: "Enter correct values" });
+            return res.status(200).json({ success, error: "Email or Password is incorrect" });
         }
 
+        // Creating a payload for JWT
         const data = {
             user: {
-                id: user.id
+                id: user._id
             }
         }
+
         success = true;
         const authToken = jwt.sign(data, Secret_Key);
         res.json({ success, authToken });
     } catch (error) {
         console.error(error.message);
-        res.status(500).send("Some error occured");
+        res.status(500).send("Internal Server Error");
     }
 })
 
@@ -100,7 +105,7 @@ router.post('/getuser', fetchuser, async (req, res) => {
         res.send(user);
     } catch (error) {
         console.error(error.message);
-        res.status(500).send("Some error occured");
+        res.status(500).send("Internal Server Error");
     }
 })
 module.exports = router;
