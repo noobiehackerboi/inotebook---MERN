@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 const Login = (props) => {
     const HOST = process.env.REACT_APP_HOST;
-    const PORT = process.env.REACT_APP_PORT;
-    const host = `${HOST}:${PORT}`;
+    // const PORT = process.env.REACT_APP_PORT;
+    // const host = `${HOST}:${PORT}`;
+    const host = `${HOST}`;
     const navigate = useNavigate();
 
     const [user, setUser] = useState({ email: "", password: "" });
