@@ -34,7 +34,7 @@ const SignUp = (props) => {
         setUser({ ...user, [e.target.name]: e.target.value });
     }
     return (
-        <div className="container">
+        <div className="container" data-bs-theme={props.mode}>
             <h1 className='mb-5'>
                 Sign Up to use iNoteBook - Your personal notes on cloud
             </h1>

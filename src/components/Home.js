@@ -2,9 +2,9 @@ import Notes from "./Notes"
 
 const Home = (props) => {
   return (
-    <div>
+    <div data-bs-theme={props.mode}>
       <Notes showAlert={props.showAlert} />
-    </div>
+    </div >
   )
 }
 
