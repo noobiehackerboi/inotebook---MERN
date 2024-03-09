@@ -44,7 +44,7 @@ const Navbar = (props) => {
                             <Link className={`nav-link ${location.pathname === '/about' ? "active" : ""}`} to="/about">About</Link>
                         </li> */}
                     </ul>
-                    <div className="d-flex justify-center-end">
+                    <div className="d-flex justify-center-end align-items-center">
                         <label className="theme-switch mx-5">
                             <input type="checkbox" className="theme-switch__checkbox" onClick={props.toggleMode} />
                             <div className="theme-switch__container">
