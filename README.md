@@ -16,8 +16,8 @@ This web app allows users to create an account and save, delete, edit notes on c
 * * MongoDB & mongoose
 
 * Dev dependencies
-* * concurrently
-* * nodemon
+* * Concurrently
+* * Nodemon
 
 
 ## Use npm install to install all dependencies after going into specific directories.
