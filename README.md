@@ -1,3 +1,37 @@
+# INoteBook - Your personal notes on cloud
+
+This web app allows users to create an account and save, delete, edit notes on cloud (CRUD Operations).
+
+## Technologies used -
+* Frontend
+* * React.js
+* * React DOM
+* * React Router DOM
+
+* Backend
+* * Node.js and Express.js
+* * Express Validator
+* * Jsonwebtokens
+* * Bcrypt.js
+* * MongoDB & mongoose
+
+* Dev dependencies
+* * concurrently
+* * nodemon
+
+
+## Use npm install to install all dependencies after going into specific directories.
+
+How to start in development mode
+cd into server directory and then
+
+ - `npm run both`
+
+ will run both frontend and backend concurrently.
+
+## If you want to contribute
+If you want to contribute or help us out with a feature then create a seperate branch and add a pull request. For more details on how to contribute you can refer to [First Contribution](https://github.com/firstcontributions/first-contributions).
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -6,20 +40,14 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
-### `npm start`
+- `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Runs the client side in the development mode.\
+Open [http://localhost:5000](http://localhost:5000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The page will reload when you make changes.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
+- `npm run build`
 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
@@ -29,7 +57,29 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+- `npm run nodemon`
+
+Runs the server side in the development mode.\
+Open [http://localhost:8000](http://localhost:8000) to view it in your browser.
+
+The page will reload when you make changes.
+
+- `npm run both`
+
+Runs the server and client side in the development mode.\
+Open [http://localhost:8000](http://localhost:8000) to view server in your browser.\
+Open [http://localhost:5000](http://localhost:5000) to view client in your browser.
+
+The page will reload when you make changes.
+
+- `npm test`
+
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+
+
+- `npm run eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
